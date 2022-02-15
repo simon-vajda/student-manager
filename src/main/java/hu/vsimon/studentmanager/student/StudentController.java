@@ -44,4 +44,10 @@ public class StudentController {
         model.addAttribute("student", student);
         return "student";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable long id) {
+        studentService.deleteStudentById(id);
+        return "redirect:/";
+    }
 }

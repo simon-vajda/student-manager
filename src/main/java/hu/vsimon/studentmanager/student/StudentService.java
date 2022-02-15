@@ -32,4 +32,8 @@ public class StudentService {
 
         return optional.get();
     }
+
+    public void deleteStudentById(long id) {
+        studentRepository.deleteById(id);
+    }
 }
