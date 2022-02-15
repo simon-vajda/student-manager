@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hallgató | Student Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container pt-3">
+        <h1 th:text='${student.getFirstName() == null ? "Új hallgató" : "Hallgató szerkesztése"}'>Hallgató szerkesztése</h1>
+
+        <form action="/save" method="post" class="row g-2 mt-3" th:object="${student}">
+            <input type="hidden" name="id" th:if="${student.getFirstName() != null}" th:field="*{id}">
+            <input type="text" class="form-control" placeholder="Vezetéknév" th:field="*{lastName}">
+            <input type="text" class="form-control" placeholder="Keresztnév" th:field="*{firstName}">
+            <input type="email" class="form-control" placeholder="Email" th:field="*{email}">
+            <button type="submit" class="btn btn-primary">Mentés</button>
+        </form>
+
+    </div>
+</body>
+
+</html>
