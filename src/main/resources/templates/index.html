@@ -34,6 +34,26 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="text-secondary text" th:text='${"Hallgatók száma: " + studentCount}'>
+            Hallgatók száma:
+        </div>
+
+        <nav th:if="${pageCount > 1}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend='${currentPage == 1 ? "disabled" : ""}'>
+                    <a class="page-link" th:href="@{'?page=' + ${currentPage - 1}}">Előző</a>
+                </li>
+                <th:block th:each="i : ${#numbers.sequence(1, pageCount)}">
+                    <li class="page-item" th:classappend="${i == currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" th:href="@{'?page=' + ${i}}" th:text="${i}">1</a>
+                    </li>
+                </th:block>
+                <li class="page-item" th:classappend='${currentPage == pageCount ? "disabled" : ""}'>
+                    <a class="page-link" th:href="@{'?page=' + ${currentPage + 1}}">Következő</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </body>
 

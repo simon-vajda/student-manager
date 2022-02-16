@@ -1,12 +1,14 @@
 package hu.vsimon.studentmanager.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.Option;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class StudentController {
@@ -18,9 +20,22 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping
-    public String homePage(Model model) {
-        model.addAttribute("students", studentService.getAllStudents());
+    @GetMapping("/")
+    public String homePage(Model model, @RequestParam(required = false, name = "page") Optional<Integer> optionalPage) {
+        int pageNumber = optionalPage.orElse(1);
+        if(pageNumber < 1)
+            return "redirect:/";
+
+        Page<Student> page = studentService.findPage(pageNumber, 5);
+
+        if(pageNumber > page.getTotalPages())
+            return "redirect:/";
+
+        List<Student> students = page.getContent();
+        model.addAttribute("students", students);
+        model.addAttribute("pageCount", page.getTotalPages());
+        model.addAttribute("studentCount", page.getTotalElements());
+        model.addAttribute("currentPage", page.getNumber()+1);
         return "index";
     }
 
@@ -28,7 +43,6 @@ public class StudentController {
     public String newStudentPage(Model model) {
         Student student = new Student();
         model.addAttribute("student", student);
-
         return "student";
     }
 
