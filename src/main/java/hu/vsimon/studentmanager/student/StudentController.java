@@ -20,13 +20,16 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    // TODO: Sorting and pagination does not work at the same time
     @GetMapping("/")
-    public String homePage(Model model, @RequestParam(required = false, name = "page") Optional<Integer> optionalPage) {
-        int pageNumber = optionalPage.orElse(1);
+    public String homePage(Model model,
+                           @RequestParam(required = false, name = "page", defaultValue = "1") int pageNumber,
+                           @RequestParam(required = false, name = "sort_by", defaultValue = "lastName") String sortBy,
+                           @RequestParam(required = false, defaultValue = "false") boolean desc) {
         if(pageNumber < 1)
             return "redirect:/";
 
-        Page<Student> page = studentService.findPage(pageNumber, 5);
+        Page<Student> page = studentService.findPage(pageNumber, 5, sortBy, desc);
 
         if(pageNumber > page.getTotalPages())
             return "redirect:/";
@@ -36,6 +39,8 @@ public class StudentController {
         model.addAttribute("pageCount", page.getTotalPages());
         model.addAttribute("studentCount", page.getTotalElements());
         model.addAttribute("currentPage", page.getNumber()+1);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("desc", desc);
         return "index";
     }
 

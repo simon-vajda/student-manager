@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,11 +41,12 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public Page<Student> findPage(int pageNumber, int pageSize) {
+    public Page<Student> findPage(int pageNumber, int pageSize, String field, boolean desc) {
         if(pageSize < 5) pageSize = 5;
         if(pageSize > 100) pageSize = 100;
 
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+        Sort sort = desc ? Sort.by(field).descending() : Sort.by(field).ascending();
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize, sort);
         return studentRepository.findAll(pageable);
     }
 }
