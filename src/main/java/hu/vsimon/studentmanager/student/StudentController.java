@@ -31,7 +31,7 @@ public class StudentController {
 
         Page<Student> page = studentService.findPage(pageNumber, 5, sortBy, desc);
 
-        if(pageNumber > page.getTotalPages())
+        if(pageNumber > page.getTotalPages() && page.getTotalElements() > 0)
             return "redirect:/";
 
         List<Student> students = page.getContent();
